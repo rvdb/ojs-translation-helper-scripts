@@ -68,18 +68,17 @@
   <xsl:template match="locale">
     <xsl:variable name="reference.locale" select="$reference.locale.doc/locale"/>
     <xsl:variable name="target.locale" select="$target.locale.doc/locale"/>
-    <xsl:variable name="target.locale.orphan.entries" select="$target.locale/message[not(key('locale.entries', @key, $reference.locale.doc)[self::locale])]"/>
+    <xsl:variable name="target.locale.orphan.entries" select="$target.locale/message[not(key('locale.entries', @key, $reference.locale.doc)[self::message])]"/>
     <xsl:text>&#xa;</xsl:text>
     <locale name="{($target.locale.doc/locale/@name,$target.locale.abbrev)[normalize-space()][1]}" full_name="{($target.locale.doc/locale/@full_name,$target.locale.name)[normalize-space()][1]}">
       <xsl:call-template name="locale.process">
         <xsl:with-param name="reference.locale" select="$reference.locale"/>
         <xsl:with-param name="target.locale.orphan.entries" select="$target.locale.orphan.entries"/>
       </xsl:call-template>
-      <xsl:text>&#xa;</xsl:text>
     </locale>
   </xsl:template>
   
-  <!-- locale: 
+  <!-- email_texts: 
          -create new email_texts element for target locale
          -align existing entries and group orphans
   -->
@@ -94,7 +93,6 @@
         <xsl:with-param name="reference.locale" select="$reference.locale"/>
         <xsl:with-param name="target.locale.orphan.entries" select="$target.locale.orphan.entries"/>
       </xsl:call-template>
-      <xsl:text>&#xa;</xsl:text>
     </email_texts>
   </xsl:template>
 
@@ -132,6 +130,7 @@
     </xsl:choose>
   </xsl:template>
   
+  <!-- email_text -->
   <xsl:template match="email_text">
     <xsl:param name="indent" tunnel="yes"/>    
     <xsl:variable name="target.locale.entry" select="if ($target.locale.doc) then key('locale.entries', @key, $target.locale.doc)[self::email_text](:[normalize-space()]:) else ()"/>
